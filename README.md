@@ -22,3 +22,21 @@ subjects:
 $ kubectl apply -f environment
 $ kubectl apply -f services/traefik
 ```
+
+### Demo
+
+#### whoami
+
+```bash
+$ curl [-k] https://whoami.example.com/tls
+$ curl [-k] http://whoami.example.com/notls
+```
+
+#### dashboard
+
+https://admin.example.com
+
+###### id/pass
+
+- test/test
+- test2/test2
