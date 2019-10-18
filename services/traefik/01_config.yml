@@ -241,7 +241,7 @@ data:
     [certificatesResolvers]
       [certificatesResolvers.default]
         [certificatesResolvers.default.acme]
-          email = "dev@caredoc.kr"
+          email = "email@example.com"
           storage = "acme/acme.json"
           [certificatesResolvers.default.acme.tlsChallenge]
 

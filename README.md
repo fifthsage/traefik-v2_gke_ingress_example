@@ -7,7 +7,7 @@
 
 ### edit google account
 
-[permissions.yml](environment/02_cluster-role.yml)
+[environment/02_cluster-role.yml](environment/02_cluster-role.yml)
 
 ```yml
 subjects:
