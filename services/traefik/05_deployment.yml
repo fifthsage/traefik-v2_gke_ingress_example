@@ -33,7 +33,7 @@ spec:
             claimName: pvc-tmp
       containers:
         - name: traefik
-          image: traefik:v2.0
+          image: traefik:v2.1
           volumeMounts:
             - mountPath: "/config"
               name: "config"
