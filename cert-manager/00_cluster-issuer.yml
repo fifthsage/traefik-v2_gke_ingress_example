@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-cluster-issuer
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: email@yourdomain.com
+    privateKeySecretRef:
+      name: letsencrypt-production
+    solvers:
+    - selector: {}
+      http01:
+        ingress:
+          class: traefik

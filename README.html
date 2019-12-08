@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Traefik V2 Google Kubernetes Example</title>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+        
+        <style>
+.task-list-item { list-style-type: none; } .task-list-item-checkbox { margin-left: -20px; vertical-align: middle; }
+</style>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        
+        
+    </head>
+    <body class="vscode-light">
+        <h1 id="traefik-v2-google-kubernetes-example">Traefik V2 Google Kubernetes Example</h1>
+<h2 id="requires">requires</h2>
+<ul>
+<li>gcloud</li>
+<li>gke</li>
+</ul>
+<h2 id="edit-google-account">edit google account</h2>
+<p><a href="environment/02_cluster-role.yml">environment/02_cluster-role.yml</a></p>
+<pre><code class="language-yml"><div><span class="hljs-attr">subjects:</span>
+<span class="hljs-attr">  - apiGroup:</span> <span class="hljs-string">rbac.authorization.k8s.io</span>
+<span class="hljs-attr">    kind:</span> <span class="hljs-string">User</span>
+<span class="hljs-attr">    name:</span> <span class="hljs-string">&lt;user@email.com&gt;</span>
+</div></code></pre>
+<h2 id="set-your-domain-for-cert-manager">set your domain for cert manager</h2>
+<p><a href="cert-manager/00_cluster-issuer.yml">cert-manager/00_cluster-issuer.yml</a></p>
+<pre><code class="language-yml"><div><span class="hljs-attr">spec:</span>
+<span class="hljs-attr">  acme:</span>
+<span class="hljs-attr">    server:</span> <span class="hljs-attr">https://acme-v02.api.letsencrypt.org/directory</span>
+<span class="hljs-attr">    email:</span> <span class="hljs-string">email@yourdomain.com</span>
+</div></code></pre>
+<h2 id="set-your-domain-certification">set your domain certification</h2>
+<p><a href="cert-manager/01_certification.yml">cert-manager/01_certification.yml</a></p>
+<pre><code class="language-yml"><div><span class="hljs-attr">apiVersion:</span> <span class="hljs-string">cert-manager.io/v1alpha2</span>
+<span class="hljs-attr">kind:</span> <span class="hljs-string">Certificate</span>
+<span class="hljs-attr">metadata:</span>
+<span class="hljs-attr">  name:</span> <span class="hljs-string">cert-yourdomain</span>
+<span class="hljs-attr">  namespace:</span> <span class="hljs-string">development</span>
+<span class="hljs-attr">spec:</span>
+<span class="hljs-attr">  secretName:</span> <span class="hljs-string">cert-yourdomain</span>
+<span class="hljs-attr">  issuerRef:</span>
+<span class="hljs-attr">    name:</span> <span class="hljs-string">letsencrypt-cluster-issuer</span>
+<span class="hljs-attr">    kind:</span> <span class="hljs-string">ClusterIssuer</span>
+<span class="hljs-attr">  commonName:</span> <span class="hljs-string">yourdomain.com</span>
+<span class="hljs-attr">  dnsNames:</span>
+<span class="hljs-bullet">    -</span> <span class="hljs-string">yourdomain.com</span>
+<span class="hljs-bullet">    -</span> <span class="hljs-string">somthing.yourdomain.com</span>
+<span class="hljs-attr">  acme:</span>
+<span class="hljs-attr">    config:</span>
+<span class="hljs-attr">      - http01:</span>
+<span class="hljs-attr">          ingressClass:</span> <span class="hljs-string">traefik</span>
+<span class="hljs-attr">        domains:</span>
+<span class="hljs-bullet">          -</span> <span class="hljs-string">yourdomain.com</span>
+<span class="hljs-bullet">          -</span> <span class="hljs-string">somthing.yourdomain.com</span>
+</div></code></pre>
+<h2 id="kubernetes-apply">kubernetes apply</h2>
+<pre><code class="language-bash"><div>kubectl apply -f environment
+kubectl apply -f cert-manager
+kubectl apply -f services/traefik
+</div></code></pre>
+<h2 id="demo">Demo</h2>
+<h3 id="whoami">whoami</h3>
+<pre><code class="language-bash"><div>curl [-k] https://whoami.example.com/tls
+curl [-k] http://whoami.example.com/notls
+</div></code></pre>
+<h3 id="dashboard">dashboard</h3>
+<p><a href="https://admin.example.com">https://admin.example.com</a></p>
+<h4 id="idpass">id/pass</h4>
+<ul>
+<li>test/test</li>
+<li>test2/test2</li>
+</ul>
+
+    </body>
+    </html>

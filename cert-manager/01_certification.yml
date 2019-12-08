@@ -1,0 +1,25 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: cert-team-buttercup
+  namespace: development
+spec:
+  secretName: cert-team-buttercup
+  issuerRef:
+    name: letsencrypt-cluster-issuer
+    kind: ClusterIssuer
+  commonName: team-buttercup.org
+  dnsNames:
+    - team-buttercup.org
+    - traefik.team-buttercup.org
+    - development.api.caredocplus.team-buttercup.org
+    - development.backoffice.caredocplus.team-buttercup.org
+  acme:
+    config:
+      - http01:
+          ingressClass: traefik
+        domains:
+          - team-buttercup.org
+          - traefik.team-buttercup.org
+          - development.api.caredocplus.team-buttercup.org
+          - development.backoffice.caredocplus.team-buttercup.org
